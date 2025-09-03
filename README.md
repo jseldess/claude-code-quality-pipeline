@@ -58,6 +58,7 @@ claude-code-quality-pipeline/
 - Claude Code installed and configured
 - Node.js 16+ and npm
 - Basic command-line experience
+- **macOS users**: For full test validation, install `timeout` command via `brew install coreutils` (optional)
 
 ### Installation
 
@@ -80,7 +81,7 @@ Try making a simple edit to trigger the pipeline:
 ```bash
 cd sample-project/src/components
 # Add a console.log to LoginForm.jsx to see quality pipeline in action
-claude "Add a console.log statement to LoginForm.jsx for debugging"
+claude "Add a console.log statement to sample-project/src/components/LoginForm.jsx for debugging"
 ```
 
 When you edit a file, you'll see:

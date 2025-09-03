@@ -84,8 +84,8 @@ echo -e "\n${BLUE}🔧 Phase 2: Hook Configuration Testing${NC}"
 
 # Test 6: Hook configuration syntax
 if [ -f ".claude/settings.local.json" ]; then
-    if command -v python > /dev/null 2>&1; then
-        python -m json.tool .claude/settings.local.json > /dev/null 2>&1
+    if command -v python3 > /dev/null 2>&1; then
+        python3 -m json.tool .claude/settings.local.json > /dev/null 2>&1
         test_result $? "Hook configuration syntax valid"
         
         # Test for 5-step pipeline

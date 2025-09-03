@@ -1,11 +1,10 @@
-# Claude Code Quality Pipeline - Simple Reference Implementation
+# Claude Code Quality Pipeline - Reference Implementation
 
 A working example of an intelligent and automated **Code Quality Pipeline** using Claude Code hooks and agents.
 
 - [What this demonstrates](#what-this-demonstrates)
 - [Pipeline flow](#pipeline-flow)
 - [Results you'll see](#results-youll-see)
-- [Quickstart](#quickstart)
 - [Directory structure](#directory-structure)
 - [Getting started](#getting-started)
   - [Prerequisites](#prerequisites)

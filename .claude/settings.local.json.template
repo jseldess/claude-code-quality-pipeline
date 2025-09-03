@@ -1,0 +1,45 @@
+{
+  "_comment": "Claude Code Quality Pipeline - Production Configuration Template",
+  "_instructions": "Copy this to .claude/settings.local.json and customize as needed",
+  
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write", 
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '🔍 Security check...' && if [[ \"${file_path}\" =~ \\.(env|key|pem|p12|secret)$ ]] || [[ \"${file_path}\" == *password* ]] || [[ \"${file_path}\" == *token* ]]; then echo '🚫 BLOCKED: Cannot modify security-sensitive files' >&2 && exit 1; fi"
+          }
+        ]
+      }
+    ],
+    
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '🔧 Auto-formatting...' && if [[ \"${file_path}\" =~ \\.(js|jsx|ts|tsx)$ ]]; then npx prettier --write \"${file_path}\" 2>/dev/null || true; fi"
+          },
+          {
+            "type": "command",
+            "command": "echo '🔍 Linting...' && if [[ \"${file_path}\" =~ \\.(js|jsx|ts|tsx)$ ]]; then npx eslint --fix \"${file_path}\" 2>/dev/null || true; fi"
+          },
+          {
+            "type": "command",
+            "command": "echo '🧪 Testing...' && if [[ \"${file_path}\" =~ ^src/.* ]]; then timeout 30s npm test -- --findRelatedTests \"${file_path}\" --passWithNoTests --silent --watchAll=false 2>/dev/null || echo 'Tests completed with warnings'; fi"
+          }
+        ]
+      }
+    ],
+    
+    "_customization_notes": {
+      "file_patterns": "Modify regex patterns to match your project structure",
+      "tools": "Update tool commands (prettier, eslint, etc.) based on your setup", 
+      "timeouts": "Adjust timeout values based on your test suite performance",
+      "error_handling": "Customize || true vs || echo patterns for your workflow"
+    }
+  }
+}

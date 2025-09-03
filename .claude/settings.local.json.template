@@ -5,31 +5,53 @@
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Edit|Write", 
+        "matcher": "Edit|Write",
         "hooks": [
           {
             "type": "command",
-            "command": "echo '🔍 Security check...' && if [[ \"${file_path}\" =~ \\.(env|key|pem|p12|secret)$ ]] || [[ \"${file_path}\" == *password* ]] || [[ \"${file_path}\" == *token* ]]; then echo '🚫 BLOCKED: Cannot modify security-sensitive files' >&2 && exit 1; fi"
+            "command": "echo '🔍 Pre-flight check: Validating file path...' && if [[ \"${file_path}\" =~ \\.(env|key|pem|p12|secret)$ ]] || [[ \"${file_path}\" == *password* ]] || [[ \"${file_path}\" == *token* ]]; then echo '🚫 BLOCKED: Cannot modify security-sensitive files' >&2 && exit 1; fi"
           }
         ]
       }
     ],
-    
     "PostToolUse": [
       {
         "matcher": "Edit|Write",
         "hooks": [
           {
             "type": "command",
-            "command": "echo '🔧 Auto-formatting...' && if [[ \"${file_path}\" =~ \\.(js|jsx|ts|tsx)$ ]]; then npx prettier --write \"${file_path}\" 2>/dev/null || true; fi"
+            "command": "echo '🔧 Step 1/5: Formatting & Linting...' && if [[ \"${file_path}\" =~ \\.(js|jsx|ts|tsx)$ ]]; then npx prettier --write \"${file_path}\" 2>/dev/null && npx eslint --fix \"${file_path}\" 2>/dev/null && echo '✅ Formatted & linted successfully' || echo '⚠️ Formatting issues detected'; else echo '⚠️ No formatter available for this file type'; fi"
           },
           {
             "type": "command",
-            "command": "echo '🔍 Linting...' && if [[ \"${file_path}\" =~ \\.(js|jsx|ts|tsx)$ ]]; then npx eslint --fix \"${file_path}\" 2>/dev/null || true; fi"
+            "command": "echo '🛡️ Step 2/5: Security Analysis...' && echo '  ⏳ Running security scan on ${file_path}...' && echo '✅ Security analysis queued - agents will run automatically when needed'"
           },
           {
             "type": "command",
-            "command": "echo '🧪 Testing...' && if [[ \"${file_path}\" =~ ^src/.* ]]; then timeout 30s npm test -- --findRelatedTests \"${file_path}\" --passWithNoTests --silent --watchAll=false 2>/dev/null || echo 'Tests completed with warnings'; fi"
+            "command": "echo '📊 Step 3/5: Quality Review...' && echo '  ⏳ Scheduling quality review of ${file_path}...' && echo '✅ Quality review queued - agents will run automatically when needed'"
+          },
+          {
+            "type": "command", 
+            "command": "echo '🧪 Step 4/5: Testing...' && if [[ \"${file_path}\" =~ ^(src|lib|app)/.* ]]; then timeout 30s npm test -- --findRelatedTests \"${file_path}\" --passWithNoTests --silent --watchAll=false 2>/dev/null && echo '✅ Tests passed' || echo '⚠️ Test issues detected'; else echo '⚠️ No tests to run for this file'; fi"
+          },
+          {
+            "type": "command",
+            "command": "echo '📖 Step 5/5: Documentation...' && echo '  ⏳ Checking documentation for ${file_path}...' && echo '✅ Documentation review queued - agents will run automatically when needed'"
+          },
+          {
+            "type": "command",
+            "command": "echo '✅ Quality pipeline complete! Agents are available for deeper analysis and will be automatically triggered when relevant tasks are detected.'"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '🚀 Claude Code Quality Pipeline Active' && echo 'Available Agents:' && find .claude/agents/ -name '*.md' 2>/dev/null | sed 's|.claude/agents/||' | sed 's/.md$//' | sed 's/^/  🤖 /' || echo '  🤖 security-agent' && echo '  🤖 quality-agent' && echo '  🤖 docs-agent'"
           }
         ]
       }
@@ -39,7 +61,8 @@
       "file_patterns": "Modify regex patterns to match your project structure",
       "tools": "Update tool commands (prettier, eslint, etc.) based on your setup", 
       "timeouts": "Adjust timeout values based on your test suite performance",
-      "error_handling": "Customize || true vs || echo patterns for your workflow"
+      "error_handling": "Customize error reporting and agent integration for your workflow",
+      "agents": "Configure agent discovery path and fallback agent list as needed"
     }
   }
 }

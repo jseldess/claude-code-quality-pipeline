@@ -73,28 +73,15 @@ claude-code-quality-pipeline/
 
 ### Usage examples
 
-**Basic development**:
-
-```bash
-cd sample-project
-claude "Fix the security issues in LoginForm.jsx"
-# Watch automated pipeline run
-```
-
-**Manual agent analysis**:
-
-```bash
-# Security analysis
-/agent security-agent "Deep security scan of authentication module"
-
-# Quality review  
-/agent quality-agent "Comprehensive analysis of LoginForm component"
-
-# Documentation check
-/agent docs-agent "Update docs for new validation features"
-```
-
 **Pipeline in action**:
+
+Try making a simple edit to trigger the pipeline:
+
+```bash
+cd sample-project/src/components
+# Add a console.log to LoginForm.jsx to see quality pipeline in action
+claude "Add a console.log statement to LoginForm.jsx for debugging"
+```
 
 When you edit a file, you'll see:
 
@@ -116,6 +103,19 @@ When you edit a file, you'll see:
 
 ✅ Quality pipeline complete! Use agents for deeper analysis:
 /agent security-agent, /agent quality-agent, /agent docs-agent
+```
+
+**Manual agent analysis**:
+
+```bash
+# Security analysis
+/agent security-agent "Deep security scan of authentication module"
+
+# Quality review  
+/agent quality-agent "Comprehensive analysis of LoginForm component"
+
+# Documentation check
+/agent docs-agent "Update docs for new validation features"
 ```
 
 ## Agents

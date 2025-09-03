@@ -145,8 +145,8 @@ else
 fi
 
 # Validate JSON configuration
-if command -v python &> /dev/null; then
-    if python -m json.tool .claude/settings.local.json > /dev/null 2>&1; then
+if command -v python3 &> /dev/null; then
+    if python3 -m json.tool .claude/settings.local.json > /dev/null 2>&1; then
         echo -e "${GREEN}✅ Hook configuration is valid JSON${NC}"
     else
         echo -e "${RED}❌ Invalid JSON in settings.local.json${NC}"

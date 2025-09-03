@@ -53,7 +53,7 @@ cd ..
 cp .claude/settings.local.json.template .claude/settings.local.json
 
 # Validate configuration
-python -m json.tool .claude/settings.local.json
+python3 -m json.tool .claude/settings.local.json
 ```
 
 ### 5. Test Installation
@@ -103,7 +103,7 @@ cat > .claude/settings.local.json << 'EOF'
 EOF
 
 # Test hook configuration
-python -m json.tool .claude/settings.local.json
+python3 -m json.tool .claude/settings.local.json
 ```
 
 ## Troubleshooting
